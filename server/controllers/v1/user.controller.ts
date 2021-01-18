@@ -1,11 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import * as bcrypt from 'bcrypt';
-import UserModel from '../../models/user.model';
 import { CallbackError, NativeError } from 'mongoose';
-
-interface ResponseError extends Error {
-  status?: number;
-}
+import UserModel from '../../models/user.model';
+import { ResponseError } from '../../models/model.type';
 
 const errorHandler = (
   err: NativeError | null,

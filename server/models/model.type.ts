@@ -3,6 +3,10 @@ enum ModelType {
   product = 'product',
 }
 
+interface ResponseError extends Error {
+  status?: number;
+}
+
 interface ResponseApi {
   isOk: boolean;
   statusCode?: number;
@@ -10,4 +14,4 @@ interface ResponseApi {
   data: any;
 }
 
-export { ModelType, ResponseApi };
+export { ModelType, ResponseApi, ResponseError };
