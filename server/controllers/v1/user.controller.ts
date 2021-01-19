@@ -1,40 +1,55 @@
 import { Request, Response, NextFunction } from 'express';
 import * as bcrypt from 'bcrypt';
-import { CallbackError, NativeError } from 'mongoose';
-import UserModel from '../../models/user.model';
-import { ResponseError } from '../../models/model.type';
+import { CallbackError } from 'mongoose';
+import UserModel, { UserDoc } from '../../models/user.model';
+import { ValidUser } from '../../models/user.type';
+import { ResponseApi } from '../../models/model.type';
+import { errorHandler } from '../../validations/error.validation';
 
-const errorHandler = (
-  err: NativeError | null,
-  next: NextFunction,
-  item: any
+interface UserRequest extends Request {
+  docUser: UserDoc;
+}
+
+export const getAllUsers = (
+  req: Request,
+  res: Response,
+  next: NextFunction
 ): void => {
-  if (err) return next(err);
-  if (!item) {
-    const error: ResponseError = new Error('Usuario o password incorrecto');
-    error.status = 500;
-    return next(error);
-  }
+  UserModel.find().exec((error: CallbackError, item: UserDoc) => {
+    // Error response
+    if (error || !item) return errorHandler(error, next, item);
+    // Ok response
+    const response: ResponseApi = {
+      isOk: true,
+      data: item,
+      statusCode: 200,
+    };
+    res.json(response);
+  });
 };
 
-const data_example = [
-  {
-    id: 123,
-    user: 'admin',
-    role: 'ROLE_ADMIN',
-  },
-  {
-    id: 124,
-    user: 'user',
-    role: 'ROLE_USER',
-  },
-];
+export const setUserId = (
+  req: UserRequest,
+  res: Response,
+  next: NextFunction,
+  id: number
+): void => {
+  UserModel.findById(id)
+    /* .where({ available: true }) */
+    .exec((error: CallbackError, item: UserDoc) => {
+      if (error) return errorHandler(error, next, item);
+      req.docUser = item;
+      next();
+    });
+};
 
-export const getAllUsers = (req: Request, res: Response): void => {
-  res.json({
-    result: true,
-    data: data_example,
-  });
+export const getUserById = (req: UserRequest, res: Response): void => {
+  const response: ResponseApi = {
+    isOk: true,
+    data: req.docUser,
+    statusCode: 200,
+  };
+  res.json(response);
 };
 
 export const createUser = (
@@ -51,10 +66,15 @@ export const createUser = (
   };
   const modelUser = new UserModel(data);
   modelUser.save((error: CallbackError, item) => {
+    // Error response
     if (error || !item) return errorHandler(error, next, item);
-    res.json({
-      result: true,
+    // Ok response
+    const response: ResponseApi = {
+      isOk: true,
+      message: ValidUser.UserCreated,
       data: item,
-    });
+      statusCode: 200,
+    };
+    res.json(response);
   });
 };

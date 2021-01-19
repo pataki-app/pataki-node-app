@@ -1,6 +1,5 @@
 import * as mongoose from 'mongoose';
-import { Request, Response, NextFunction } from 'express';
-import { body, validationResult, ValidationChain } from 'express-validator';
+import { body, ValidationChain } from 'express-validator';
 import UserModel from '../models/user.model';
 import { ErrorUser } from '../models/user.type';
 
@@ -27,20 +26,4 @@ const createUserValidation = (): ValidationChain[] => [
     .withMessage(ErrorUser.PasswordFormat),
 ];
 
-const validator = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Response<any> | void => {
-  const errors = validationResult(req).formatWith(({ msg, param, value }) => ({
-    error: msg,
-    param,
-    value,
-  }));
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-  next();
-};
-
-export { validator, createUserValidation };
+export { createUserValidation };

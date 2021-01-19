@@ -20,4 +20,9 @@ enum ErrorUser {
   PasswordFormat = 'PASSWORD_FORMAT',
 }
 
-export { RoleUser, ErrorUser };
+enum ValidUser {
+  /** user created  */
+  UserCreated = 'USER_CREATED',
+}
+
+export { RoleUser, ErrorUser, ValidUser };

@@ -10,7 +10,7 @@ interface ResponseError extends Error {
 interface ResponseApi {
   isOk: boolean;
   statusCode?: number;
-  message: string;
+  message?: string;
   data: any;
 }
 
