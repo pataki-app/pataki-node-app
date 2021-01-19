@@ -2,9 +2,9 @@
   "name": "pataki-node-app",
   "version": "1.0.0",
   "description": "Backend node pataki app",
-  "main": "index.js",
+  "main": "dist/app.js",
   "scripts": {
-    "start": "tsc && node dist/index.js",
+    "build": "tsc -p .",
     "dev": "cross-env NODE_ENV=development nodemon --watch",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"

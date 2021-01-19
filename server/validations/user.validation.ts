@@ -1,6 +1,6 @@
+import * as mongoose from 'mongoose';
 import { Request, Response, NextFunction } from 'express';
 import { body, validationResult, ValidationChain } from 'express-validator';
-import { Promise } from 'mongoose';
 import UserModel from '../models/user.model';
 import { ErrorUser } from '../models/user.type';
 
@@ -12,10 +12,14 @@ const createUserValidation = (): ValidationChain[] => [
     .withMessage(ErrorUser.EmailInvalid)
     .custom(async (value) => {
       const userExist = await UserModel.findOne({ email: value });
-      if (userExist) return Promise.reject(ErrorUser.EmailDuplicate);
+      if (userExist) return mongoose.Promise.reject(ErrorUser.EmailDuplicate);
     })
     .normalizeEmail(),
-  body('password').trim().not().isEmpty().withMessage(ErrorUser.EmailRequired),
+  body('password')
+    .trim()
+    .not()
+    .isEmpty()
+    .withMessage(ErrorUser.PasswordRequired),
   body('password').isLength({ min: 8 }).withMessage(ErrorUser.PasswordMin),
   body('password')
     .trim()
