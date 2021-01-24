@@ -5,7 +5,7 @@ import { ModelType } from './model.type';
 export interface UserDoc extends mongoose.Document {
   name: string;
   email: string;
-  password: string;
+  password?: string;
   role: string;
   cart: string[];
 }

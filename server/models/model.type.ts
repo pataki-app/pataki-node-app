@@ -5,6 +5,7 @@ enum ModelType {
 
 interface ResponseError extends Error {
   status?: number;
+  statusCode?: number;
 }
 
 interface ResponseApi {

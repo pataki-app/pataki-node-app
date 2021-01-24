@@ -18,11 +18,17 @@ enum ErrorUser {
   PasswordMin = 'PASSWORD_MIN',
   /** invalid password: format  */
   PasswordFormat = 'PASSWORD_FORMAT',
+  /** invalid password: format  */
+  InvalidUserOrPassword = 'INVALID_USER_OR_PASSWORD',
+  /** invalid user rol */
+  InvalidUserRol = 'INVALID_USER_ROL',
 }
 
 enum ValidUser {
   /** user created  */
   UserCreated = 'USER_CREATED',
+  /** user login  */
+  UserLogin = 'USER_LOGIN',
 }
 
 export { RoleUser, ErrorUser, ValidUser };
