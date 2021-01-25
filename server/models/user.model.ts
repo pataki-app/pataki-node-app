@@ -12,48 +12,53 @@ export interface UserDoc extends mongoose.Document {
 
 const Schema = mongoose.Schema;
 
-const userModel = new Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  role: {
-    type: String,
-    default: RoleUser.user,
-  },
-  cart: {
-    items: [
-      {
-        productId: {
-          type: Schema.Types.ObjectId,
-          ref: ModelType.product,
+const userModel = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    role: {
+      type: String,
+      default: RoleUser.user,
+    },
+    cart: {
+      items: [
+        {
+          productId: {
+            type: Schema.Types.ObjectId,
+            ref: ModelType.product,
+          },
+          count: {
+            type: Number,
+            required: true,
+          },
+          total: {
+            type: Number,
+            required: true,
+          },
         },
-        count: {
-          type: Number,
-          required: true,
-        },
-        total: {
-          type: Number,
-          required: true,
-        },
-      },
-    ],
+      ],
+    },
   },
-});
+  {
+    timestamps: true,
+  }
+);
+
+const User = mongoose.model<UserDoc>(ModelType.user, userModel);
 
 userModel.static('build', (attrs: UserDoc) => {
   return new User(attrs);
 });
-
-const User = mongoose.model<UserDoc>(ModelType.user, userModel);
 
 export default User;
