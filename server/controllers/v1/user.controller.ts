@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import * as bcrypt from 'bcrypt';
 import { CallbackError } from 'mongoose';
+import * as httpStatus from 'http-status';
 import UserModel, { UserDoc } from '../../models/user.model';
 import { ValidUser } from '../../models/user.type';
 import { ResponseApi } from '../../models/model.type';
@@ -15,16 +16,22 @@ export const getAllUsers = (
   res: Response,
   next: NextFunction
 ): void => {
-  UserModel.find().exec((error: CallbackError, item: UserDoc) => {
+  UserModel.find().exec((error: CallbackError, item: UserDoc[]) => {
     // Error response
     if (error || !item) return errorHandler(error, next, item);
+    if (item) {
+      item = item.map((user) => {
+        user.password = undefined;
+        return user;
+      });
+    }
     // Ok response
     const response: ResponseApi = {
       isOk: true,
       data: item,
-      statusCode: 200,
+      statusCode: httpStatus.OK,
     };
-    res.json(response);
+    res.status(httpStatus.OK).json(response);
   });
 };
 
@@ -47,9 +54,9 @@ export const getUserById = (req: UserRequest, res: Response): void => {
   const response: ResponseApi = {
     isOk: true,
     data: req.docUser,
-    statusCode: 200,
+    statusCode: httpStatus.OK,
   };
-  res.json(response);
+  res.status(httpStatus.OK).json(response);
 };
 
 export const createUser = (
@@ -73,8 +80,8 @@ export const createUser = (
       isOk: true,
       message: ValidUser.UserCreated,
       data: item,
-      statusCode: 200,
+      statusCode: httpStatus.OK,
     };
-    res.json(response);
+    res.status(httpStatus.OK).json(response);
   });
 };

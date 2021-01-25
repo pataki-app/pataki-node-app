@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import * as bcrypt from 'bcrypt';
 import { CallbackError } from 'mongoose';
 import * as jwt from 'jsonwebtoken';
+import * as httpStatus from 'http-status';
 import UserModel, { UserDoc } from '../../models/user.model';
 import { ValidUser, ErrorUser } from '../../models/user.type';
 import { ResponseApi } from '../../models/model.type';
@@ -24,7 +25,7 @@ const responseLogin = (item: UserDoc): ResponseApi => {
 
   const response: ResponseApi = {
     isOk: true,
-    statusCode: 200,
+    statusCode: httpStatus.OK,
     message: ValidUser.UserLogin,
     data: {
       user,
@@ -49,13 +50,13 @@ export const login = (
       const invalidResponse: ResponseApi = {
         isOk: false,
         message: ErrorUser.InvalidUserOrPassword,
-        statusCode: 401,
+        statusCode: httpStatus.NOT_FOUND,
         data: null,
       };
       // Error response
       if (error) return errorHandler(error, next, item);
       if (!item || !bcrypt.compareSync(data.password, item.password || '')) {
-        return res.status(401).json(invalidResponse);
+        return res.status(httpStatus.NOT_FOUND).json(invalidResponse);
       }
 
       // Ok response

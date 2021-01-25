@@ -1,7 +1,10 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
+import * as fileUpload from 'express-fileupload';
 import * as dotenv from 'dotenv';
 import * as mongoose from 'mongoose';
+import * as cors from 'cors';
+import * as httpStatus from 'http-status';
 import { ResponseApi } from './models/model.type';
 import { generateRouters } from './routers/v1';
 
@@ -20,24 +23,36 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(
+  fileUpload({
+    limits: { fileSize: 1 * 1024 * 1024 },
+    // abortOnLimit: true
+  })
+);
+
+app.use(
+  cors({
+    credentials: true,
+    origin: true,
+  })
+);
 
 generateRouters(app);
 
 app.use(
   (
-    error: any,
     req: express.Request,
     res: express.Response,
     next: express.NextFunction
   ): void => {
-    const statusCode = error.statusCode || 500;
     const response: ResponseApi = {
       isOk: false,
-      statusCode,
-      message: error.message,
-      data: error.data,
+      statusCode: httpStatus.NOT_FOUND,
+      message: 'NOT_FOUND',
+      data: null,
     };
-    res.status(statusCode).json(response);
+    res.status(httpStatus.NOT_FOUND).json(response);
+    next();
   }
 );
 

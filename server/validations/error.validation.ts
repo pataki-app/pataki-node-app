@@ -1,6 +1,7 @@
 import { NativeError } from 'mongoose';
 import { Request, Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
+import * as httpStatus from 'http-status';
 import { ResponseError } from '../models/model.type';
 
 // Generic Error
@@ -12,7 +13,7 @@ export const errorHandler = (
   if (error) return next(error);
   if (!item) {
     const error: ResponseError = new Error('ERROR_500');
-    error.status = 500;
+    error.status = httpStatus.INTERNAL_SERVER_ERROR;
     return next(error);
   }
 };
@@ -29,6 +30,7 @@ export const validator = (
     value,
   }));
   if (!errors.isEmpty()) {
+    console.log('error validation');
     return res.status(400).json({ errors: errors.array() });
   }
   next();
