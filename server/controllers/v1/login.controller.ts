@@ -4,13 +4,9 @@ import { CallbackError } from 'mongoose';
 import * as jwt from 'jsonwebtoken';
 import * as httpStatus from 'http-status';
 import UserModel, { UserDoc } from '../../models/user.model';
-import { ValidUser, ErrorUser } from '../../models/user.type';
+import { ValidUser, ErrorUser, RoleUser } from '../../models/user.type';
 import { ResponseApi } from '../../models/model.type';
 import { errorHandler } from '../../validations/error.validation';
-
-interface RequestUser extends Request {
-  session?: any;
-}
 
 const responseLogin = (item: UserDoc): ResponseApi => {
   const seed = process.env.SEED || '10';
@@ -76,7 +72,7 @@ export const signUp = (
     name: req.body.name,
     email: req.body.email,
     password: bcrypt.hashSync(req.body.password, saltOrRounds),
-    role: req.body.role,
+    role: RoleUser.user,
   };
   const modelUser = new UserModel(data);
   modelUser.save((error: CallbackError, item) => {
@@ -88,7 +84,7 @@ export const signUp = (
   });
 };
 
-export const logout = (req: RequestUser, res: Response): void => {
+export const logout = (req: Request, res: Response): void => {
   if (req.session) {
     req.session.destroy(() => {
       res.json({

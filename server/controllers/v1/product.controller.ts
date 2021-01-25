@@ -74,9 +74,9 @@ export const createProduct = async (
     const response: ResponseApi = {
       isOk: true,
       data,
-      statusCode: httpStatus.OK,
+      statusCode: httpStatus.CREATED,
     };
-    res.status(httpStatus.OK).json(response);
+    res.status(httpStatus.CREATED).json(response);
   });
 };
 

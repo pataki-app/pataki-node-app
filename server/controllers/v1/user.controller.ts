@@ -80,8 +80,8 @@ export const createUser = (
       isOk: true,
       message: ValidUser.UserCreated,
       data: item,
-      statusCode: httpStatus.OK,
+      statusCode: httpStatus.CREATED,
     };
-    res.status(httpStatus.OK).json(response);
+    res.status(httpStatus.CREATED).json(response);
   });
 };

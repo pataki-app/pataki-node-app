@@ -1,6 +1,7 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as fileUpload from 'express-fileupload';
+import * as session from 'express-session';
 import * as dotenv from 'dotenv';
 import * as mongoose from 'mongoose';
 import * as cors from 'cors';
@@ -27,6 +28,15 @@ app.use(
   fileUpload({
     limits: { fileSize: 1 * 1024 * 1024 },
     // abortOnLimit: true
+  })
+);
+const secretKey = process.env.SESSION_KEY || 'secretKey';
+app.use(
+  session({
+    secret: secretKey,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false },
   })
 );
 
