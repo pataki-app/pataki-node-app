@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import * as httpStatus from 'http-status';
-import ProductModel, { ProductDoc } from '../../models/product.model';
+import { ProductDoc } from '../../models/product.model';
 import { ErrorProduct } from '../../models/product.type';
 import Cart, { IProduct, ICart } from '../../session/cart.model';
 import { ResponseApi } from '../../models/model.type';
@@ -9,16 +9,6 @@ interface ProductRequest extends Request {
   docProduct: ProductDoc;
   session: any;
 }
-
-const cartList = async (cart: Cart) => {
-  const ids = cart.items.map((item) => item?.product?._id);
-  const docProduct = await ProductModel.find({ _id: { $in: ids } })
-    .select('-sold -available -createdAt -updatedAt -__v -image')
-    .lean()
-    .exec();
-  const _cart: ICart = { ...cart, items: docProduct };
-  return _cart;
-};
 
 export const addProductSession = async (
   req: ProductRequest,
@@ -43,10 +33,10 @@ export const addProductSession = async (
     };
     cart.addProduct(objProduct);
     req.session.cart = cart;
-    const cartAllList = await cartList(cart);
+    const cartList: ICart = { ...cart };
     const response: ResponseApi = {
       isOk: true,
-      data: cartAllList,
+      data: cartList,
       statusCode: httpStatus.OK,
     };
     res.status(httpStatus.OK).json(response);
@@ -62,10 +52,44 @@ export const cartListSession = async (
 ): Promise<void> => {
   try {
     const cart = new Cart(req.session.cart ? req.session.cart : []);
-    const cartListProducts = await cartList(cart);
+    const cartList: ICart = { ...cart };
     const response: ResponseApi = {
       isOk: true,
-      data: cartListProducts,
+      data: cartList,
+      statusCode: httpStatus.OK,
+    };
+    res.status(httpStatus.OK).json(response);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteProductSession = async (
+  req: ProductRequest,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    if (req.session?.cart?.items?.length > 0) {
+      const cart = new Cart(req.session?.cart ? req.session.cart : []);
+      const objProduct: IProduct = {
+        product: req.docProduct,
+        count: 1,
+        total: req.docProduct?.value,
+      };
+      cart.remove(objProduct);
+      req.session.cart = cart;
+      const cartList: ICart = { ...cart };
+      const response: ResponseApi = {
+        isOk: true,
+        data: cartList,
+        statusCode: httpStatus.OK,
+      };
+      res.status(httpStatus.OK).json(response);
+    }
+    const response: ResponseApi = {
+      isOk: true,
+      data: null,
       statusCode: httpStatus.OK,
     };
     res.status(httpStatus.OK).json(response);
