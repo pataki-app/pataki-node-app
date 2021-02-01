@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 import { ModelType } from './model.type';
 import CategoryModel from './category.model';
+import { EvaluationDoc } from './evaluation.model';
 
 export interface ProductDoc extends mongoose.Document {
   name: string;
@@ -14,6 +15,10 @@ export interface ProductDoc extends mongoose.Document {
     contentType: string;
   };
   category: string;
+  evaluation: {
+    items: any;
+    point: number;
+  };
 }
 
 const Schema = mongoose.Schema;
@@ -31,6 +36,9 @@ const productModel = new Schema(
     value: {
       type: Number,
       required: true,
+    },
+    valueDiscount: {
+      type: Number,
     },
     stock: {
       type: Number,
@@ -52,6 +60,22 @@ const productModel = new Schema(
       type: String,
       required: true,
     },
+    discount: {
+      type: Boolean,
+    },
+    evaluation: {
+      items: [
+        {
+          evaluationId: {
+            type: Schema.Types.ObjectId,
+            ref: ModelType.evaluation,
+          },
+        },
+      ],
+      point: {
+        type: Number,
+      },
+    },
   },
   {
     timestamps: true,
@@ -59,16 +83,6 @@ const productModel = new Schema(
 );
 
 const Product = mongoose.model<ProductDoc>(ModelType.product, productModel);
-
-const categoryValidator = async (value: string) => {
-  const response = await CategoryModel.exists({ name: value });
-  return response;
-};
-
-productModel.path('name').validate({
-  validator: categoryValidator,
-  message: 'Categoria de Producto no existe : {VALUE}',
-});
 
 productModel.static('build', (attrs: ProductDoc) => {
   return new Product(attrs);

@@ -4,6 +4,7 @@ import loginRouter from './login.router';
 import categoryRouter from './category.router';
 import productRouter from './product.router';
 import cartRouter from './cart.router';
+import evaluationRouter from './evaluation.router';
 
 export const generateRouters = (app: Express): void => {
   app.use('/api/v1', userRouter);
@@ -11,4 +12,5 @@ export const generateRouters = (app: Express): void => {
   app.use('/api/v1', categoryRouter);
   app.use('/api/v1', productRouter);
   app.use('/api/v1', cartRouter);
+  app.use('/api/v1', evaluationRouter);
 };

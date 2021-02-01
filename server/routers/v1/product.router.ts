@@ -13,7 +13,7 @@ import { isAuth, isAdmin } from '../../middleware/auth.middleware';
 
 const router = express.Router();
 
-router.all('/product/*', isAuth, isAdmin);
+// router.all('/product/*', isAuth, isAdmin);
 
 router.param('productId', setProductId);
 

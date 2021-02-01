@@ -7,14 +7,11 @@ import { errorHandler } from '../../validations/error.validation';
 import { ResponseApi, ResponseError } from '../../models/model.type';
 import { ErrorProduct } from '../../models/product.type';
 
-interface ProductRequest extends Request {
+export interface ProductRequest extends Request {
+  docProduct: ProductDoc;
   files?: {
     image: any;
   };
-}
-
-interface ProductRequest extends Request {
-  docProduct: ProductDoc;
 }
 
 export const setProductId = (

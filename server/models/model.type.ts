@@ -2,6 +2,7 @@ enum ModelType {
   user = 'user',
   product = 'product',
   category = 'category',
+  evaluation = 'evaluation',
 }
 
 interface ResponseError extends Error {
