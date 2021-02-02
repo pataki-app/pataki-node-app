@@ -46,13 +46,13 @@ export const login = (
       const invalidResponse: ResponseApi = {
         isOk: false,
         message: ErrorUser.InvalidUserOrPassword,
-        statusCode: httpStatus.NOT_FOUND,
+        statusCode: httpStatus.UNAUTHORIZED,
         data: null,
       };
       // Error response
       if (error) return errorHandler(error, next, item);
       if (!item || !bcrypt.compareSync(data.password, item.password || '')) {
-        return res.status(httpStatus.NOT_FOUND).json(invalidResponse);
+        return res.status(httpStatus.UNAUTHORIZED).json(invalidResponse);
       }
 
       // Ok response
@@ -87,9 +87,13 @@ export const signUp = (
 export const logout = (req: Request, res: Response): void => {
   if (req.session) {
     req.session.destroy(() => {
-      res.json({
-        result: true,
-      });
+      const response: ResponseApi = {
+        isOk: true,
+        statusCode: httpStatus.OK,
+        message: 'DESTROY_SESSION',
+        data: null,
+      };
+      res.json(response);
     });
   }
 };

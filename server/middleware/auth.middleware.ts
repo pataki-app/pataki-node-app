@@ -47,7 +47,7 @@ export const isAdmin = (
   next: NextFunction
 ): void => {
   const user = req.user;
-  if (user.role === RoleUser.admin) {
+  if (user && user.role === RoleUser.admin) {
     next();
   } else {
     const response: ResponseApi = {

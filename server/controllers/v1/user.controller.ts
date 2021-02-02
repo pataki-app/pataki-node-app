@@ -42,7 +42,7 @@ export const setUserId = (
   id: number
 ): void => {
   UserModel.findById(id)
-    /* .where({ available: true }) */
+    .where({ available: true })
     .exec((error: CallbackError, item: UserDoc) => {
       if (error) return errorHandler(error, next, item);
       req.docUser = item;

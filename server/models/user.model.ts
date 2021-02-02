@@ -7,6 +7,7 @@ export interface UserDoc extends mongoose.Document {
   email: string;
   password?: string;
   role: string;
+  available: boolean;
   cart: string[];
 }
 
@@ -30,6 +31,10 @@ const userModel = new Schema(
     role: {
       type: String,
       default: RoleUser.user,
+    },
+    available: {
+      type: Boolean,
+      default: true,
     },
     cart: {
       items: [

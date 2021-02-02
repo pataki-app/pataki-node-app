@@ -17,6 +17,6 @@ router.param('userId', setUserId);
 
 router.get('/user/users', getAllUsers);
 router.get('/user/:userId', getUserById);
-router.post('user/create', createUserValidation(), validator, createUser);
+router.post('/user/create', createUserValidation(), validator, createUser);
 
 export default router;
