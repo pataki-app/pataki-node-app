@@ -49,7 +49,7 @@ export const createProduct = async (
   }
 
   // validate category
-  const response = await CategoryModel.exists({ name: req.body.name });
+  const response = await CategoryModel.exists({ name: req.body.category });
   if (!response) {
     const response: ResponseApi = {
       isOk: false,
@@ -58,6 +58,28 @@ export const createProduct = async (
       data: null,
     };
     res.status(httpStatus.OK).json(response);
+  }
+
+  // validate value of discount
+  if (modelProduct.discount?.isDiscount) {
+    if (!modelProduct.discount?.percentDiscount) {
+      const response: ResponseApi = {
+        isOk: true,
+        message: ErrorProduct.NotPercentDiscount,
+        statusCode: httpStatus.BAD_REQUEST,
+        data: null,
+      };
+      res.status(httpStatus.BAD_REQUEST).json(response);
+    }
+    const discount = modelProduct.discount.percentDiscount;
+    const value = (discount * modelProduct.value) / 100;
+    modelProduct.discount.valueDiscount = modelProduct.value - value;
+  } else {
+    modelProduct.discount = {
+      isDiscount: false,
+      percentDiscount: 0,
+      valueDiscount: modelProduct.discount.valueDiscount,
+    };
   }
 
   // save product
@@ -106,9 +128,48 @@ export const updateProduct = (
   res: Response,
   next: NextFunction
 ): void => {
+  const data = { ...req.body };
+  const discount = {
+    isDiscount: req.body.discount?.isDiscount,
+    percentDiscount: req.body.discount?.percentDiscount,
+    valueDiscount: 0,
+  };
+
+  let newDiscount = { ...req.docProduct.discount };
+
+  // when product is false and update with promotion discount true
+  if (discount?.isDiscount) {
+    // validate percent discount too
+    const discountPercent = discount.percentDiscount;
+    if (discountPercent) {
+      const value = (discountPercent * req.docProduct.value) / 100;
+      newDiscount = {
+        isDiscount: true,
+        percentDiscount: discountPercent,
+        valueDiscount: req.docProduct.value - value,
+      };
+    } else {
+      const response: ResponseApi = {
+        isOk: true,
+        message: ErrorProduct.NotPercentDiscount,
+        statusCode: httpStatus.BAD_REQUEST,
+        data: null,
+      };
+      res.status(httpStatus.BAD_REQUEST).json(response);
+    }
+  } else {
+    newDiscount = {
+      isDiscount: false,
+      percentDiscount: 0,
+      valueDiscount: req.docProduct.value,
+    };
+  }
+
+  data.discount = newDiscount;
+
   ProductModel.findByIdAndUpdate(
     req.docProduct._id,
-    req.body,
+    data,
     { new: true },
     (error, item) => {
       if (error || !item) return errorHandler(error, next, item);

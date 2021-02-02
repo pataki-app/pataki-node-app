@@ -22,7 +22,7 @@ router.get('/product', allProducts);
 router.get('/product/:productId', getProductById);
 router.get('/product/category/:category', getProductByCategory);
 router.get('/product/image/:productId', getImageById);
-router.put('/product', updateProduct);
+router.put('/product/:productId', updateProduct);
 router.delete('/product', removeProduct);
 
 export default router;

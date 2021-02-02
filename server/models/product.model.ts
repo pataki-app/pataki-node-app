@@ -6,6 +6,11 @@ export interface ProductDoc extends mongoose.Document {
   name: string;
   description: string;
   value: number;
+  discount: {
+    isDiscount: boolean;
+    percentDiscount: number;
+    valueDiscount: number;
+  };
   stock: number;
   sold: number;
   available: boolean;
@@ -36,8 +41,17 @@ const productModel = new Schema(
       type: Number,
       required: true,
     },
-    valueDiscount: {
-      type: Number,
+    discount: {
+      isDiscount: {
+        type: Boolean,
+        default: false,
+      },
+      percentDiscount: {
+        type: Number,
+      },
+      valueDiscount: {
+        type: Number,
+      },
     },
     stock: {
       type: Number,
@@ -58,9 +72,6 @@ const productModel = new Schema(
     category: {
       type: String,
       required: true,
-    },
-    discount: {
-      type: Boolean,
     },
     evaluation: {
       items: [
