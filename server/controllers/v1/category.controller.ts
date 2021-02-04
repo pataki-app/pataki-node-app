@@ -66,7 +66,6 @@ export const updateCategory = (
   next: NextFunction
 ): void => {
   // const id = req.params.id;
-  console.log('req.docCategory', req.docCategory);
   const data = {
     name: req.body.name,
   };

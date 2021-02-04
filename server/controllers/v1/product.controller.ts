@@ -27,6 +27,16 @@ export const setProductId = (
   });
 };
 
+const generateDiscount = (discount: number, value: number) => {
+  const newValue = (discount * value) / 100;
+  const newDiscount = {
+    isDiscount: true,
+    percentDiscount: discount,
+    valueDiscount: value - newValue,
+  };
+  return newDiscount;
+};
+
 export const createProduct = async (
   req: ProductRequest,
   res: Response,
@@ -142,12 +152,8 @@ export const updateProduct = (
     // validate percent discount too
     const discountPercent = discount.percentDiscount;
     if (discountPercent) {
-      const value = (discountPercent * req.docProduct.value) / 100;
-      newDiscount = {
-        isDiscount: true,
-        percentDiscount: discountPercent,
-        valueDiscount: req.docProduct.value - value,
-      };
+      const productValue = req.body.value ?? req.docProduct.value;
+      newDiscount = generateDiscount(discountPercent, productValue);
     } else {
       const response: ResponseApi = {
         isOk: true,
@@ -165,7 +171,29 @@ export const updateProduct = (
     };
   }
 
+  if (req.body.value && !discount?.isDiscount) {
+    newDiscount = {
+      isDiscount: false,
+      percentDiscount: 0,
+      valueDiscount: 0,
+    };
+  }
+
   data.discount = newDiscount;
+
+  // validate file
+  if (req.files && req.files.image) {
+    if (req.files.image.size > 10000000) {
+      const error: ResponseError = new Error(ErrorProduct.InvalidSizeExceeded);
+      error.statusCode = httpStatus.REQUEST_ENTITY_TOO_LARGE;
+      return next(error);
+    } else {
+      data.image = {
+        data: req.files.image.data,
+        contentType: req.files.image.mimetype,
+      };
+    }
+  }
 
   ProductModel.findByIdAndUpdate(
     req.docProduct._id,
