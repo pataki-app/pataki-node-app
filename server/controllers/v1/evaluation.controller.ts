@@ -42,6 +42,8 @@ export const createEvaluation = async (
     comment: req.body.comment,
   };
 
+  let createEvaluation = true;
+
   if (
     (data.point && parseInt(data.point) > 5) ||
     (data.point && parseInt(data.point) < 1)
@@ -53,6 +55,7 @@ export const createEvaluation = async (
       statusCode: httpStatus.BAD_REQUEST,
     };
     res.status(httpStatus.BAD_REQUEST).json(response);
+    createEvaluation = false;
   }
 
   if (data.product && data.user) {
@@ -69,6 +72,7 @@ export const createEvaluation = async (
         statusCode: httpStatus.BAD_REQUEST,
       };
       res.status(httpStatus.BAD_REQUEST).json(response);
+      createEvaluation = false;
     }
 
     // Product validation
@@ -86,6 +90,7 @@ export const createEvaluation = async (
         statusCode: httpStatus.BAD_REQUEST,
       };
       res.status(httpStatus.BAD_REQUEST).json(response);
+      createEvaluation = false;
     }
   } else {
     const response: ResponseApi = {
@@ -95,26 +100,29 @@ export const createEvaluation = async (
       statusCode: httpStatus.BAD_REQUEST,
     };
     res.status(httpStatus.BAD_REQUEST).json(response);
+    createEvaluation = false;
   }
 
-  const responseCreate = await new EvaluationModel(data).createEvaluation(
-    req.docProduct
-  );
+  if (createEvaluation) {
+    const responseCreate = await new EvaluationModel(data).createEvaluation(
+      req.docProduct
+    );
 
-  if (responseCreate) {
-    const response: ResponseApi = {
-      isOk: true,
-      message: ValidEvaluation.EvaluationCreated,
-      data,
-      statusCode: httpStatus.CREATED,
-    };
-    res.status(httpStatus.CREATED).json(response);
-  } else {
-    const response: ResponseApi = {
-      isOk: false,
-      data: null,
-      statusCode: httpStatus.BAD_REQUEST,
-    };
-    res.status(httpStatus.BAD_REQUEST).json(response);
+    if (responseCreate) {
+      const response: ResponseApi = {
+        isOk: true,
+        message: ValidEvaluation.EvaluationCreated,
+        data,
+        statusCode: httpStatus.CREATED,
+      };
+      res.status(httpStatus.CREATED).json(response);
+    } else {
+      const response: ResponseApi = {
+        isOk: false,
+        data: null,
+        statusCode: httpStatus.BAD_REQUEST,
+      };
+      res.status(httpStatus.BAD_REQUEST).json(response);
+    }
   }
 };
