@@ -22,6 +22,8 @@ enum ErrorUser {
   InvalidUserOrPassword = 'INVALID_USER_OR_PASSWORD',
   /** invalid user rol */
   InvalidUserRol = 'INVALID_USER_ROL',
+  /** invalid user */
+  NotFound = 'NOT_FOUND_USER',
 }
 
 enum ValidUser {

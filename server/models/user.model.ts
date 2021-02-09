@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 import { RoleUser } from './user.type';
 import { ModelType } from './model.type';
+import { IProduct } from '../session/cart.model';
 
 export interface UserDoc extends mongoose.Document {
   name: string;
@@ -8,7 +9,9 @@ export interface UserDoc extends mongoose.Document {
   password?: string;
   role: string;
   available: boolean;
-  cart: string[];
+  cart: {
+    items: IProduct[];
+  };
 }
 
 const Schema = mongoose.Schema;

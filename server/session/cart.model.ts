@@ -9,7 +9,8 @@ export interface ICart {
 export interface IProduct {
   product: ProductDoc | any;
   count: number;
-  total: number;
+  total?: number;
+  _id?: string;
 }
 
 class Cart {
@@ -34,7 +35,9 @@ class Cart {
       newitems.push(product);
     } else {
       newitems[index].count++;
-      newitems[index].total = newitems[index].count * product.total;
+      if (product?.total) {
+        newitems[index].total = newitems[index].count * product?.total;
+      }
     }
     this.items = newitems;
     this.count = this.items.reduce(
@@ -56,7 +59,9 @@ class Cart {
     if (_cantidad && _cantidad > 1) {
       _cantidad = this.items[index].count - 1;
       newitems[index].count = _cantidad;
-      newitems[index].total = product.total * _cantidad;
+      if (product.total) {
+        newitems[index].total = product.total * _cantidad;
+      }
     } else {
       delete newitems[index];
     }

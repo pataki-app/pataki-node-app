@@ -11,9 +11,9 @@ export interface ProductDoc extends mongoose.Document {
     percentDiscount: number;
     valueDiscount: number;
   };
-  stock: number;
-  sold: number;
-  available: boolean;
+  stock?: number;
+  sold?: number;
+  available?: boolean;
   image?: {
     data: Buffer;
     contentType: string;

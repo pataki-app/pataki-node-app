@@ -71,6 +71,7 @@ evaluationModel.methods.createEvaluation = async function (
 
   docProductPopulate.evaluation.items = oldProducts;
   docProductPopulate.evaluation.point = Math.round(percentProduct);
+
   await docProductPopulate.save();
 
   return this.save();
