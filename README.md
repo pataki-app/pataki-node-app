@@ -20,7 +20,7 @@ Mejoras realizadas en el proyecto:
 4. **Evaluation**: Se agrega un nuevo modelo a la aplicación para que los usuarios puedan dejar comentarios y una evaluación a un producto, además se agrega una función para calcular el promedio de esta evaluación y así poder tener una estadística de los productos mejores evaluados de la tienda.
 
 
-#### Instalación :wrench:
+## Instalación :wrench:
 
 1. Clonar repositorio
 ```
@@ -62,12 +62,21 @@ npm run dev
 4. La aplicación se ejecutará en el puerto configurado :rocket:
 
 
-#### Usuario Admin
+
+## Documentación :clipboard:
+
+- [Documentación Postman](https://documenter.getpostman.com/view/2449009/TW77fNgQ)
+
+- [Documentación Swagger](http://localhost:3000/api-docs/#/) : Se debe iniciar la aplicación e ir a este link, esta implementación es sólo un ejemplo, falta hacer la implementación de todos los endopoints de la aplicación.
+
+## Usuario Admin
 
 - Si no existe un usuario del tipo Admin, al inicial la aplicación se crea uno:
   user: admin@pataki.com
   password: pataki123
 
-#### Login
+## Login
 
 - Para ingresar a algunos endpoints se necesiará haber iniciado sesión anteriormente, para esto se debe hacer login a la app.
+
+
