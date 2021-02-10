@@ -1,4 +1,4 @@
-# pataki-node-app :tw-1f60e:
+# pataki-node-app :sunglasses:
 
 Proyecto para curso Node.js escalab.
 
@@ -20,7 +20,7 @@ Mejoras realizadas en el proyecto:
 4. **Evaluation**: Se agrega un nuevo modelo a la aplicación para que los usuarios puedan dejar comentarios y una evaluación a un producto, además se agrega una función para calcular el promedio de esta evaluación y así poder tener una estadística de los productos mejores evaluados de la tienda.
 
 
-#### Instalación :tw-1f680:
+#### Instalación :wrench:
 
 1. Clonar repositorio
 ```
@@ -29,7 +29,7 @@ git clone https://github.com/pataki-app/pataki-node-app.git
 
 2. Crear base de datos ``Pataki``
 
-:tw-26a0: Previamente se instaló Robo 3T para manejo de base de datos.
+:warning: Previamente se instaló Robo 3T para manejo de base de datos.
 
 
 3. Crear archivo en el proyecto ``.env.development`` y agregar las siguientes configuraciones:
@@ -42,11 +42,11 @@ EXPIRES_IN=1h
 SESSION_KEY=secretkey
 ```
 
-:tw-26a0: Considerar cambiar las variables que correspondan según configuración local de base de datos.
+:warning: Considerar cambiar las variables que correspondan según configuración local de base de datos.
 
 4. Instalar dependencias del proyecto:
 
-:tw-26a0: Tener instalado Node
+:warning: Tener instalado Node
 
 ```
 npm install
@@ -58,7 +58,7 @@ npm install
 npm run dev
 ```
 
-4. La aplicación se ejecutará en el puerto configurado :tw-1f680:
+4. La aplicación se ejecutará en el puerto configurado :rocket:
 
 
 #### Usuario Admin
