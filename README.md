@@ -4,7 +4,7 @@ Proyecto para curso Node.js escalab.
 
 Se utiliza la base desarrollada en clases para realizar tienda online de Pataki Store.
 
-Este proyecto utiliza el siguiente stack de tecnologías base:
+Este proyecto utiliza el siguiente stack de tecnologías:
 
 - Node.js
 - Express
@@ -32,7 +32,7 @@ git clone https://github.com/pataki-app/pataki-node-app.git
 :warning: Previamente se instaló Robo 3T para manejo de base de datos.
 
 
-3. Crear archivo en el proyecto ``.env.development`` y agregar las siguientes configuraciones:
+3. Crear archivo ``.env.development`` en el proyecto  y agregar las siguientes configuraciones:
 ```
 PORT=3000
 URL_MONGO=mongodb://localhost:27017/Pataki
@@ -44,13 +44,14 @@ SESSION_KEY=secretkey
 
 :warning: Considerar cambiar las variables que correspondan según configuración local de base de datos.
 
-4. Instalar dependencias del proyecto:
 
-:warning: Tener instalado Node
+4. Instalar dependencias del proyecto:
 
 ```
 npm install
 ```
+
+:warning: Tener instalado Node
 
 
 4. Ejecutar localmente 
