@@ -1,0 +1,31 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Pataki Store",
+    "description": "Documentación de api backend"
+  },
+  "schemes": ["http"],
+  "host": "localhost:3000",
+  "basePath": "/api/v1",
+  "tags": {
+    "name": "Product"
+  },
+  "paths": {
+    "/product": {
+      "get": {
+        "tags": ["Product"],
+        "summary": "Get all products",
+        "operationId": "getProducts",
+        "consumes": ["application/json", "application/xml"],
+        "produces": ["application/xml", "application/json"],
+        "description": "Listado de todos los productos",
+        "responses": {
+          "200": {
+            "description": "Respuesta ok"
+          }
+        }
+      }
+    }
+  }
+}

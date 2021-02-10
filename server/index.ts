@@ -11,6 +11,8 @@ import { ResponseApi } from './models/model.type';
 import UserModel, { UserDoc } from './models/user.model';
 import { RoleUser } from './models/user.type';
 import { generateRouters } from './routers/v1';
+import * as swaggerUi from 'swagger-ui-express';
+import * as swaggerDocument from '../swagger.json';
 
 const saltOrRounds = parseInt(process.env.SALT || '10');
 
@@ -51,6 +53,7 @@ app.use(
   })
 );
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 generateRouters(app);
 
 app.use(
