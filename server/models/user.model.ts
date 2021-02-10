@@ -42,7 +42,7 @@ const userModel = new Schema(
     cart: {
       items: [
         {
-          productId: {
+          product: {
             type: Schema.Types.ObjectId,
             ref: ModelType.product,
           },

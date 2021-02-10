@@ -1,7 +1,7 @@
-import { Schema, model, Document, CallbackError } from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
 import { ModelType } from './model.type';
 import { UserDoc } from './user.model';
-import ProductModel, { ProductDoc } from './product.model';
+import { ProductDoc } from './product.model';
 import { IProduct } from '../session/cart.model';
 
 export interface OrderDoc extends Document {
@@ -63,33 +63,28 @@ orderModel.methods.createOrder = async function (
   docUser: UserDoc
 ): Promise<Document<OrderDoc>> {
   const docUserPopulate = await docUser
-    .populate('cart.items.productId')
+    .populate('cart.items.product')
     .execPopulate();
 
   let total = 0;
-  const products: IProduct[] = [];
-  docUserPopulate.cart.items.map((itemproduct) => {
-    ProductModel.findById(itemproduct._id).exec(
-      (error: CallbackError, item: ProductDoc) => {
-        if (item) {
-          total += itemproduct.count * item.value;
-          console.log(total);
-          itemproduct.product.stock -= itemproduct.count;
-          itemproduct.product.sold += itemproduct.count;
-          itemproduct.product.save();
-          const objectClone: ProductDoc = { ...itemproduct.product.toObject() };
 
-          objectClone.stock = undefined;
-          objectClone.sold = undefined;
-          objectClone.image = undefined;
-          const productReturn: IProduct = {
-            product: objectClone,
-            count: itemproduct.count,
-          };
-          products.push(productReturn);
-        }
-      }
-    );
+  const products = docUserPopulate.cart.items.map((itemproduct) => {
+    total += itemproduct.count * itemproduct.product.value;
+    itemproduct.product.stock -= itemproduct.count;
+    itemproduct.product.sold += itemproduct.count;
+    itemproduct.product.save();
+    const objectClone: ProductDoc = { ...itemproduct.product.toObject() };
+
+    objectClone.stock = undefined;
+    objectClone.sold = undefined;
+    objectClone.image = undefined;
+    objectClone.evaluation = { items: null, point: 0 };
+
+    const productReturn: IProduct = {
+      product: objectClone,
+      count: itemproduct.count,
+    };
+    return productReturn;
   });
 
   this.products = products;
